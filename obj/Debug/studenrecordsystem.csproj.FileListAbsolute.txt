@@ -1,0 +1,10 @@
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\bin\Debug\studenrecordsystem.exe.config
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\bin\Debug\studenrecordsystem.exe
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\bin\Debug\studenrecordsystem.pdb
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\obj\Debug\studenrecordsystem.csprojAssemblyReference.cache
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\obj\Debug\studenrecordsystem.csproj.CoreCompileInputs.cache
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\obj\Debug\studenrecordsystem.exe
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\obj\Debug\studenrecordsystem.pdb
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\bin\Debug\EPPlus.dll
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\bin\Debug\EPPlus.xml
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\obj\Debug\studenrecordsystem.csproj.CopyComplete
