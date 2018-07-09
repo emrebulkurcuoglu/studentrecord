@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace studenrecordsystem
 {
@@ -15,6 +14,8 @@ namespace studenrecordsystem
             Console.WriteLine("\nPlease Enter Necessary Informations\n");
 
             Student toadd = new Student();
+            toadd.Adress = new List<AdressClass>(); 
+            
 
             Console.Write("Name: ");
             toadd.Name = Console.ReadLine();
@@ -41,9 +42,114 @@ namespace studenrecordsystem
             Console.Write("Gsm: ");
             toadd.Gsm = Utils.GetNumericValueWithValidation(Console.ReadLine(), "Gsm: ", "\nPlease Enter Valid Gsm with these format (5#########)\n\n", true, 10);
 
+            toadd.Adress.Add(AddAddress(student));
+            toadd.NumberOfAdresses = 1;
+            for (int i = 0; i < 2; i++)
+            {
+                AdressClass adresstoadd = new AdressClass();
+                adresstoadd.Street = " ";
+                adresstoadd.Neighborhood = " ";
+                adresstoadd.District = " ";
+                adresstoadd.State = " ";
+                toadd.Adress.Add(adresstoadd);
+            }
+
             student.Add(toadd);
+            
+            bool condition = true;
+
+            while (condition)
+            {
+                Console.WriteLine("Dou you want to add more adress Y/N: ");
+                string yes_no = Console.ReadLine();
+
+                if (yes_no == "Y" || yes_no == "y")
+                {
+                    AddAlternativeAddresses(student, toadd.StudentId);
+                    condition = true;
+                }
+                else if (yes_no == "N" || yes_no == "n")
+                {
+                    condition = false;
+                }
+                else
+                {
+                    Console.WriteLine("\nPlease Enter Y or N: ");
+                }
+            }
+
 
             Console.WriteLine("\n...Added...\n");
+        }
+
+        public static AdressClass AddAddress(List<Student> student)
+        {
+            AdressClass adresstoadd = new AdressClass();
+            Console.WriteLine("Please Enter Adress Informations: ");
+
+            Console.Write("Street: ");
+            adresstoadd.Street = Console.ReadLine();
+
+            Console.Write("Neighborhood: ");
+            adresstoadd.Neighborhood = Console.ReadLine();
+
+            Console.Write("District: ");
+            adresstoadd.District = Console.ReadLine();
+
+            Console.Write("State: ");
+            adresstoadd.State = Console.ReadLine();
+
+            return adresstoadd;
+
+        }
+
+        public static void AddAlternativeAddresses(List<Student> student, string Id)
+        {
+            int index = FindRecord(student, Id);
+            int NumberOfAdress = student[index].NumberOfAdresses;
+            if (NumberOfAdress == 3)
+            {
+                Console.WriteLine("You Have Already Add Three Adress. You Cannot Add More Adress Information");
+            }
+            else
+            {
+                Console.WriteLine("Please Enter Adress Informations: ");
+
+                Console.Write("Street: ");
+                student[index].Adress[NumberOfAdress].Street = Console.ReadLine();
+
+                Console.Write("Neighborhood: ");
+                student[index].Adress[NumberOfAdress].Neighborhood = Console.ReadLine();
+
+                Console.Write("District: ");
+                student[index].Adress[NumberOfAdress].District = Console.ReadLine();
+
+                Console.Write("State: ");
+                student[index].Adress[NumberOfAdress].State = Console.ReadLine();
+
+                student[index].NumberOfAdresses++;
+            }
+
+        }
+
+        public static void UpdateAddresses(List<Student> student, string Id, int indexAdress)
+        {
+            int index = FindRecord(student, Id);
+            
+                Console.WriteLine("Please Enter Adress Informations: ");
+
+                Console.Write("Street: ");
+                student[index].Adress[indexAdress].Street = Console.ReadLine();
+
+                Console.Write("Neighborhood: ");
+                student[index].Adress[indexAdress].Neighborhood = Console.ReadLine();
+
+                Console.Write("District: ");
+                student[index].Adress[indexAdress].District = Console.ReadLine();
+
+                Console.Write("State: ");
+                student[index].Adress[indexAdress].State = Console.ReadLine();
+            
         }
 
         public static void UpdateRecord(List<Student> student)
@@ -75,7 +181,33 @@ namespace studenrecordsystem
                 Console.Write("Gsm: ");
                 student[index_to_update].Gsm = Utils.GetNumericValueWithValidation(Console.ReadLine(), "Gsm: ", "\nPlease Enter Valid Gsm with these format (5#########)\n\n", true, 10);
 
-                Console.WriteLine("...Record Updated...");
+
+                string choice = "-1";
+                while (choice != "9")
+                {
+                    Console.WriteLine("\nEnter Adress Number To Update || 9-EXIT");
+                    choice = Console.ReadLine();
+                    switch (choice)
+                    {
+                        case "1":
+                            UpdateAddresses(student, id, 0);
+                            break;
+
+                        case "2":
+                            UpdateAddresses(student, id, 1);
+                            break;
+
+                        case "3":
+                            UpdateAddresses(student, id, 2);
+                            break;
+
+                        default:
+                            Console.WriteLine("Please Enter Valid Adress Number\n");
+                            break;
+                    }
+
+                    Console.WriteLine("...Record Updated...");
+                }
             }
 
         }
@@ -197,13 +329,24 @@ namespace studenrecordsystem
             Console.WriteLine(student[recordIndex].Surname);
 
             Console.Write("Birthday: ");
-            Console.WriteLine(student[recordIndex].Birthday);
+            Console.WriteLine(student[recordIndex].Birthday.ToString().Substring(0, 10));
 
             Console.Write("Student Id: ");
             Console.WriteLine(student[recordIndex].StudentId);
 
             Console.Write("Gsm: ");
             Console.WriteLine(student[recordIndex].Gsm);
+
+            Console.WriteLine("Adresses");
+
+            for(int i = 1; i<=student[recordIndex].Adress.Count; i++)
+            {
+                Console.WriteLine("\n\tAdress" + i + ": ");
+                Console.WriteLine("\t\tStreet: " + student[recordIndex].Adress[i - 1].Street);
+                Console.WriteLine("\t\tNeighborhood: " + student[recordIndex].Adress[i - 1].Neighborhood);
+                Console.WriteLine("\t\tDistrict: " + student[recordIndex].Adress[i - 1].District);
+                Console.WriteLine("\t\tState: " + student[recordIndex].Adress[i - 1].State);
+            }
         }
 
         public static string AddingId(List<Student> student)
@@ -292,7 +435,7 @@ namespace studenrecordsystem
 
         }
 
-        public static bool readFromXml(List<Student> student)
+        public static bool ReadFromXml(List<Student> student)
         {
             try
             {

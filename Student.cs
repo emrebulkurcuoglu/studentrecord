@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace studenrecordsystem
 {
@@ -14,5 +15,9 @@ namespace studenrecordsystem
 
         public string Gsm { get; set; }
 
+        public List<AdressClass> Adress { get; set; } 
+
+        public int NumberOfAdresses { get; set; }
     }
+
 }

@@ -10,11 +10,11 @@ namespace studenrecordsystem
 
             List<Student> students = new List<Student>();
 
-            if (!Operations.readFromXml(students))
+            /*if (!Operations.readFromXml(students))
             {
                 Console.ReadKey();
                 return;
-            }
+            }*/
 
             Console.WriteLine("***STUDENT RECORD SYSTEM***\n");
             string choice = "-1";
@@ -52,11 +52,11 @@ namespace studenrecordsystem
 
             }
 
-            if (!Operations.WriteToXml(students))
+            /*if (!Operations.WriteToXml(students))
             {
                 Console.ReadKey();
                 return;
-            }
+            }*/
 
         }
 
