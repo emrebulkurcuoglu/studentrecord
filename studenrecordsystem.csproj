@@ -50,9 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddOperations.cs" />
     <Compile Include="AdressClass.cs" />
+    <Compile Include="AdressOperations.cs" />
     <Compile Include="Database.cs" />
-    <Compile Include="Operations.cs" />
+    <Compile Include="RemoveOperations.cs" />
+    <Compile Include="SearchFindPrintOperations.cs" />
+    <Compile Include="SqlOperations.cs" />
+    <Compile Include="StudentOperations.cs" />
+    <Compile Include="UpdateOperations.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
