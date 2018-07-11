@@ -8,13 +8,14 @@ namespace studenrecordsystem
         static void Main(string[] args)
         {
 
-            List<Student> students = new List<Student>();
+            /*List<Student> students = new List<Student>();
 
-            /*if (!Operations.readFromXml(students))
+            /*if (!Operations.ReadFromXml(students))
             {
                 Console.ReadKey();
                 return;
             }*/
+            //Operations.PrintRecord("150140112");
 
             Console.WriteLine("***STUDENT RECORD SYSTEM***\n");
             string choice = "-1";
@@ -26,19 +27,19 @@ namespace studenrecordsystem
                 switch (choice)
                 {
                     case "1":
-                        Operations.AddRecord(students);
+                        Operations.AddRecord();
                         break;
 
                     case "2":
-                        Operations.UpdateRecord(students);
+                        //Operations.UpdateRecord();
                         break;
 
                     case "3":
-                        Operations.RemoveRecord(students);
+                        //Operations.RemoveRecord();
                         break;
 
                     case "4":
-                        Operations.SearchRecord(students);
+                        Operations.SearchRecord();
                         break;
 
                     case "9":

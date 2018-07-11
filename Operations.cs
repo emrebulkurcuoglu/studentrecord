@@ -1,6 +1,7 @@
 ﻿using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 
@@ -8,15 +9,19 @@ namespace studenrecordsystem
 {
     class Operations
     {
-        public static void AddRecord(List<Student> student)
+        static class Constants
+        {
+            public const int MAX_NUMBER_OF_ADRESS = 3;
+        }
+
+        public static void AddRecord()
         {
             Console.WriteLine("\n>>>Adding Record");
             Console.WriteLine("\nPlease Enter Necessary Informations\n");
 
             Student toadd = new Student();
-            toadd.Adress = new List<AdressClass>(); 
+            toadd.Adress = new List<AdressClass>();
             
-
             Console.Write("Name: ");
             toadd.Name = Console.ReadLine();
 
@@ -28,7 +33,7 @@ namespace studenrecordsystem
 
 
             Console.Write("StudentId: ");
-            string temp = AddingId(student);
+            string temp = AddingId();
 
             if (temp == "false")
             {
@@ -42,20 +47,8 @@ namespace studenrecordsystem
             Console.Write("Gsm: ");
             toadd.Gsm = Utils.GetNumericValueWithValidation(Console.ReadLine(), "Gsm: ", "\nPlease Enter Valid Gsm with these format (5#########)\n\n", true, 10);
 
-            toadd.Adress.Add(AddAddress(student));
-            toadd.NumberOfAdresses = 1;
-            for (int i = 0; i < 2; i++)
-            {
-                AdressClass adresstoadd = new AdressClass();
-                adresstoadd.Street = " ";
-                adresstoadd.Neighborhood = " ";
-                adresstoadd.District = " ";
-                adresstoadd.State = " ";
-                toadd.Adress.Add(adresstoadd);
-            }
+            AddAlternativeAddresses(toadd.StudentId);
 
-            student.Add(toadd);
-            
             bool condition = true;
 
             while (condition)
@@ -65,7 +58,7 @@ namespace studenrecordsystem
 
                 if (yes_no == "Y" || yes_no == "y")
                 {
-                    AddAlternativeAddresses(student, toadd.StudentId);
+                    AddAlternativeAddresses(toadd.StudentId);
                     condition = true;
                 }
                 else if (yes_no == "N" || yes_no == "n")
@@ -78,78 +71,107 @@ namespace studenrecordsystem
                 }
             }
 
+            try
+            {
+                string connetionString;
+                SqlConnection cnn;
+                SqlCommand cmd;
+
+                connetionString = @"Data Source=EM-SEMRA-K;Initial Catalog=master;Integrated Security=True";
+                cnn = new SqlConnection(connetionString);
+                cnn.Open();
+      
+                string query2 = "INSERT INTO [dbo].[Students] \n([SName],\n[Surname],\n[Birthday],\n[StudentId],\n[GSM])\n VALUES";
+                query2 = query2 + "(" + "\n'" + toadd.Name + "'" + "\n,'" + toadd.Surname + "'" + "\n,'" + Utils.GetDateTimeOnConsoleWithValidationAndFormat(toadd.Birthday.ToString().Substring(0, 10), "", "").ToString().Substring(0, 10) + "'" + "\n,'" +toadd.StudentId + "'" + "\n,'" + toadd.Gsm + "')";
+                cmd = new SqlCommand(query2, cnn);
+                cmd.ExecuteNonQuery();
+                cnn.Close();
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+
 
             Console.WriteLine("\n...Added...\n");
         }
 
-        public static AdressClass AddAddress(List<Student> student)
+        public static void AddAlternativeAddresses(string Id)
         {
-            AdressClass adresstoadd = new AdressClass();
-            Console.WriteLine("Please Enter Adress Informations: ");
-
-            Console.Write("Street: ");
-            adresstoadd.Street = Console.ReadLine();
-
-            Console.Write("Neighborhood: ");
-            adresstoadd.Neighborhood = Console.ReadLine();
-
-            Console.Write("District: ");
-            adresstoadd.District = Console.ReadLine();
-
-            Console.Write("State: ");
-            adresstoadd.State = Console.ReadLine();
-
-            return adresstoadd;
-
-        }
-
-        public static void AddAlternativeAddresses(List<Student> student, string Id)
-        {
-            int index = FindRecord(student, Id);
-            int NumberOfAdress = student[index].NumberOfAdresses;
-            if (NumberOfAdress == 3)
+            FindRecord(Id);
+            
+            try
             {
-                Console.WriteLine("You Have Already Add Three Adress. You Cannot Add More Adress Information");
+                string connetionString;
+                SqlConnection cnn;
+                SqlCommand cmd;
+
+                connetionString = @"Data Source=EM-SEMRA-K;Initial Catalog=master;Integrated Security=True";
+                cnn = new SqlConnection(connetionString);
+                cnn.Open();
+
+                string query1 = "SELECT COUNT(StudentId) FROM [dbo].[Adresses] WHERE StudentId like '" + Id + "'";
+                cmd = new SqlCommand(query1, cnn);
+                SqlDataReader read = cmd.ExecuteReader();
+                read.Read();
+                string recordCount = read[0].ToString();
+                cnn.Close();
+                cnn.Open();
+
+                if (Convert.ToUInt32(recordCount) == Constants.MAX_NUMBER_OF_ADRESS)
+                {
+                    Console.WriteLine("You Have Already Add Three Adress. You Cannot Add More Adress Information");
+                }
+                else
+                {
+                    AdressClass adresstoadd2 = new AdressClass();
+                    Console.WriteLine("Please Enter Adress Informations: ");
+
+                    Console.Write("Street: ");
+                    adresstoadd2.Street = Console.ReadLine();
+
+                    Console.Write("Neighborhood: ");
+                    adresstoadd2.Neighborhood = Console.ReadLine();
+
+                    Console.Write("District: ");
+                    adresstoadd2.District = Console.ReadLine();
+
+                    Console.Write("State: ");
+                    adresstoadd2.State = Console.ReadLine();
+                    string query2 = "INSERT INTO [dbo].[Adresses] \n([StudentId],\n[AdressNo],\n[Street],\n[Neighbourhood],\n[District],\n[State_])\n VALUES";
+                    query2 = query2 + "(" + "\n'" + Id + "'" + "\n,'" + (recordCount + 1).ToString() + "'" + "\n,'" + adresstoadd2.Street + "'" + "\n,'" + adresstoadd2.Neighborhood + "'" + "\n,'" + adresstoadd2.District + "'" + "\n,'" + adresstoadd2.State + "')";
+                    cmd = new SqlCommand(query2, cnn);
+                    cmd.ExecuteNonQuery();
+                }
+
+                cnn.Close();
             }
-            else
+
+            catch (Exception e)
             {
-                Console.WriteLine("Please Enter Adress Informations: ");
-
-                Console.Write("Street: ");
-                student[index].Adress[NumberOfAdress].Street = Console.ReadLine();
-
-                Console.Write("Neighborhood: ");
-                student[index].Adress[NumberOfAdress].Neighborhood = Console.ReadLine();
-
-                Console.Write("District: ");
-                student[index].Adress[NumberOfAdress].District = Console.ReadLine();
-
-                Console.Write("State: ");
-                student[index].Adress[NumberOfAdress].State = Console.ReadLine();
-
-                student[index].NumberOfAdresses++;
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
             }
-
         }
 
         public static void UpdateAddresses(List<Student> student, string Id, int indexAdress)
         {
-            int index = FindRecord(student, Id);
-            
-                Console.WriteLine("Please Enter Adress Informations: ");
+            Console.WriteLine("Please Enter Adress Informations: ");
 
-                Console.Write("Street: ");
-                student[index].Adress[indexAdress].Street = Console.ReadLine();
+            Console.Write("Street: ");
+            student[0].Adress[indexAdress].Street = Console.ReadLine();
 
-                Console.Write("Neighborhood: ");
-                student[index].Adress[indexAdress].Neighborhood = Console.ReadLine();
+            Console.Write("Neighborhood: ");
+            student[0].Adress[indexAdress].Neighborhood = Console.ReadLine();
 
-                Console.Write("District: ");
-                student[index].Adress[indexAdress].District = Console.ReadLine();
+            Console.Write("District: ");
+            student[0].Adress[indexAdress].District = Console.ReadLine();
 
-                Console.Write("State: ");
-                student[index].Adress[indexAdress].State = Console.ReadLine();
-            
+            Console.Write("State: ");
+            student[0].Adress[indexAdress].State = Console.ReadLine();
+
         }
 
         public static void UpdateRecord(List<Student> student)
@@ -159,7 +181,7 @@ namespace studenrecordsystem
             Console.Write("\n\nEnter Student Id to Update: ");
             string id = Utils.GetNumericValueWithValidation(Console.ReadLine(), "StudentId: ", "\nPlease Enter Valid StudentId with these format (#########)\n\n", true, 9);
 
-            int index_to_update = FindRecord(student, id);
+            int index_to_update = 0;//= FindRecord(student, id);
             if (index_to_update == -1)
             {
                 Console.WriteLine("\n...Record cannot be found...\n");
@@ -167,7 +189,7 @@ namespace studenrecordsystem
             }
             else
             {
-                PrintRecord(student, index_to_update);
+                PrintRecord("");
 
                 Console.Write("Name: ");
                 student[index_to_update].Name = Console.ReadLine();
@@ -187,24 +209,42 @@ namespace studenrecordsystem
                 {
                     Console.WriteLine("\nEnter Adress Number To Update || 9-EXIT");
                     choice = Console.ReadLine();
-                    switch (choice)
+                    
+                    if(choice == "1")
                     {
-                        case "1":
-                            UpdateAddresses(student, id, 0);
-                            break;
-
-                        case "2":
-                            UpdateAddresses(student, id, 1);
-                            break;
-
-                        case "3":
-                            UpdateAddresses(student, id, 2);
-                            break;
-
-                        default:
-                            Console.WriteLine("Please Enter Valid Adress Number\n");
-                            break;
+                        UpdateAddresses(student, id, 0);
                     }
+                    else if(choice == "2" && student[index_to_update].NumberOfAdresses < 2)
+                    {
+                        Console.Write("\nThere is no adress" + choice + ". Please enter valid address number or press 0 to add new adress");
+                        choice = Console.ReadLine();
+                        if(choice == "0")
+                        {
+                            AddAlternativeAddresses( id);
+                        }
+                    }
+                    else if(choice == "2" && student[index_to_update].NumberOfAdresses > 1)
+                    {
+                        UpdateAddresses(student, id, 1);
+                    }
+                    else if (choice == "3" && student[index_to_update].NumberOfAdresses < 3)
+                    {
+                        Console.Write("\nThere is no adress" + choice + ". Please enter valid address number or press 0 to add new adress");
+                        choice = Console.ReadLine();
+                        if (choice == "0")
+                        {
+                            AddAlternativeAddresses( id);
+                        }
+                    }
+                    else if (choice == "3" && student[index_to_update].NumberOfAdresses > 2)
+                    {
+                        UpdateAddresses(student, id, 2);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nPlease enter valid number...");
+                    }
+                   
 
                     Console.WriteLine("...Record Updated...");
                 }
@@ -219,7 +259,7 @@ namespace studenrecordsystem
             Console.Write("\n\nStudentId to remove: ");
             string id = Utils.GetNumericValueWithValidation(Console.ReadLine(), "StudentId: ", "\nPlease Enter Valid StudentId with these format (#########)\n\n", true, 9);
 
-            int indexToRemove = FindRecord(student, id);
+            int indexToRemove = 0;//FindRecord(student, id);
 
             if (indexToRemove == -1)
             {
@@ -228,7 +268,7 @@ namespace studenrecordsystem
             }
             else
             {
-                PrintRecord(student, indexToRemove);
+                PrintRecord("");
 
                 Console.WriteLine("Are you sure Y/N: ");
                 bool condition = true;
@@ -257,109 +297,152 @@ namespace studenrecordsystem
             }
         }
 
-        public static void SearchRecord(List<Student> student)
+        public static void SearchRecord()
         {
             Console.Write("\n>>>Search Record");
 
             Console.Write("\n\nStudentId to search: ");
             string id = Utils.GetNumericValueWithValidation(Console.ReadLine(), "StudentId: ", "\nPlease Enter Valid StudentId with these format (#########)\n\n", true, 9);
 
-            int indexToRemove = FindRecord(student, id);
-
-            if (indexToRemove == -1)
-            {
-                Console.WriteLine("\n...Record cannot be found...\n");
-                return;
-            }
-            else
-            {
-                PrintRecord(student, indexToRemove);
-            }
+            PrintRecord(id);
         }
 
-        public static int FindRecord(List<Student> student, string Id)
+        public static int FindRecord(string Id)
         {
             var timeStart = DateTime.Now.TimeOfDay;
-
-            for (int counter = 0; counter < student.Count; counter++)
+            try
             {
-                if (student[counter].StudentId == Id)
+                string connetionString;
+                SqlConnection cnn;
+                SqlCommand cmd;
+
+                connetionString = @"Data Source=EM-SEMRA-K;Initial Catalog=master;Integrated Security=True";
+                cnn = new SqlConnection(connetionString);
+                cnn.Open();
+
+                string query1 = "SELECT COUNT(StudentId) FROM [dbo].[Students] WHERE StudentId like '" + Id + "'";
+                cmd = new SqlCommand(query1, cnn);
+                SqlDataReader read = cmd.ExecuteReader();
+                read.Read();
+                string recordCount = read[0].ToString();
+
+                if (recordCount == "1")
                 {
                     Console.Write("Record is found in ");
                     Console.WriteLine(DateTime.Now.TimeOfDay - timeStart);
-                    return counter;
+                    return -1;
                 }
+                else
+                {
+                    Console.Write("Record is not found in ");
+                    Console.WriteLine(DateTime.Now.TimeOfDay - timeStart);
+                    
+                }
+
+                cnn.Close();
+                return 0;
             }
 
-            Console.Write("Record is not found in ");
-            Console.WriteLine(DateTime.Now.TimeOfDay - timeStart);
-
-            return -1;
+            catch (Exception e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+                return 0;
+            }
+            
         }
 
-        public static bool WriteToTxt(List<Student> student)
+        public static void PrintRecord(string id)
         {
+            
             try
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\output.txt", false))
+                string connetionString;
+                SqlConnection cnn;
+                SqlCommand cmd, cmd2, cmd3;
+
+                connetionString = @"Data Source=EM-SEMRA-K;Initial Catalog=master;Integrated Security=True";
+                cnn = new SqlConnection(connetionString);
+                cnn.Open();
+
+                string query1 = "SELECT * FROM [dbo].[Students] WHERE StudentId like '" + id + "'";
+                cmd = new SqlCommand(query1, cnn);
+                SqlDataReader read = cmd.ExecuteReader();
+                read.Read();
+
+                int recordCount = FindRecord(id);
+                if (recordCount == 1)
                 {
-                    for (int counter = 0; counter < student.Count; counter++)
-                    {
-                        file.WriteLine(student[counter].Name + " " + student[counter].Surname + " " + student[counter].Birthday.ToString("dd.MM.yyyy") + " " + student[counter].StudentId + " " + student[counter].Gsm);
-                    }
+                    Console.Write("Record is not found..");
+                    return;
                 }
-                return true;
+                else
+                {
+                    Console.Write("Name: ");
+                    Console.WriteLine(read[0].ToString());
+                    Console.Write("Surname: ");
+                    Console.WriteLine(read[1].ToString());
+                    Console.Write("Birthday: ");
+                    Console.WriteLine(read[2].ToString());
+                    Console.Write("Student Id: ");
+                    Console.WriteLine(read[3].ToString());
+                    Console.Write("Gsm: ");
+                    Console.WriteLine(read[4].ToString());
+                    Console.WriteLine("\nAdresses\n");
+                }
+                cnn.Close();
+                cnn.Open();
+
+
+                string query2 = "SELECT COUNT(StudentId) FROM [dbo].[Adresses] WHERE StudentId like '" + id + "'";
+                cmd2 = new SqlCommand(query2, cnn);
+                SqlDataReader read2 = cmd2.ExecuteReader();
+                read2.Read();
+                string recordCount2 = read2[0].ToString();
+                for(int i= 1; i<=Convert.ToUInt32(recordCount2) ; i++)
+                {
+                    cnn.Close();
+                    cnn.Open();
+                    string query3 = "SELECT * FROM [dbo].[Adresses] WHERE StudentId like '" + id + "'" + "and AdressNo ="+ i.ToString() ;
+                    Console.WriteLine("\n\tAdresses" + i.ToString());
+                    cmd3 = new SqlCommand(query3, cnn);
+                    SqlDataReader read3 = cmd3.ExecuteReader();
+                    read3.Read();
+                    Console.Write("\t\tStreet: ");
+                    Console.WriteLine(read3[2].ToString());
+                    Console.Write("\t\tNeighbourhood: ");
+                    Console.WriteLine(read3[3].ToString());
+                    Console.Write("\t\tDistrict: ");
+                    Console.WriteLine(read3[4].ToString());
+                    Console.Write("\t\tState: ");
+                    Console.WriteLine(read3[5].ToString());
+                    
+                }
+
+                cnn.Close();
+                cnn.Dispose();
             }
+
             catch (Exception e)
             {
                 Console.WriteLine("The file could not be read:");
                 Console.WriteLine(e.Message);
 
-                return false;
             }
-
+            
         }
 
-        public static void PrintRecord(List<Student> student, int recordIndex)
-        {
-            Console.Write("Name: ");
-            Console.WriteLine(student[recordIndex].Name);
-
-            Console.Write("Surname: ");
-            Console.WriteLine(student[recordIndex].Surname);
-
-            Console.Write("Birthday: ");
-            Console.WriteLine(student[recordIndex].Birthday.ToString().Substring(0, 10));
-
-            Console.Write("Student Id: ");
-            Console.WriteLine(student[recordIndex].StudentId);
-
-            Console.Write("Gsm: ");
-            Console.WriteLine(student[recordIndex].Gsm);
-
-            Console.WriteLine("Adresses");
-
-            for(int i = 1; i<=student[recordIndex].Adress.Count; i++)
-            {
-                Console.WriteLine("\n\tAdress" + i + ": ");
-                Console.WriteLine("\t\tStreet: " + student[recordIndex].Adress[i - 1].Street);
-                Console.WriteLine("\t\tNeighborhood: " + student[recordIndex].Adress[i - 1].Neighborhood);
-                Console.WriteLine("\t\tDistrict: " + student[recordIndex].Adress[i - 1].District);
-                Console.WriteLine("\t\tState: " + student[recordIndex].Adress[i - 1].State);
-            }
-        }
-
-        public static string AddingId(List<Student> student)
+        public static string AddingId()
         {
             string toReturn = Utils.GetNumericValueWithValidation(Console.ReadLine(), "StudentId: ", "\nPlease Enter Valid StudentId with these format (#########)\n\n", true, 9);
             bool isUniqueId = true;
             while (isUniqueId)
             {
-                if (FindRecord(student, toReturn) != -1)
+                if (FindRecord(toReturn) == -1)
                 {
                     Console.WriteLine("...This Student Id Has Already Recorded...\n\n");
 
-                    PrintRecord(student, FindRecord(student, toReturn));
+                    PrintRecord(toReturn);
                     Console.WriteLine("\n...Do You Want To Enter Another Id (Y/N)...");
 
                     bool condition = true;
@@ -394,114 +477,6 @@ namespace studenrecordsystem
             }
 
             return toReturn;
-        }
-
-        public static bool ReadFromTxt(List<Student> student)
-        {
-
-            try
-            {
-                var file = new StreamReader(@"C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\output.txt");
-                {
-                    string line;
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        Student temp = new Student();
-
-                        var delimiters = new char[] { ' ' };
-                        var segments = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-                        temp.Name = segments[0];
-                        temp.Surname = segments[1];
-                        temp.Birthday = Utils.GetDateTimeOnConsoleWithValidationAndFormat(segments[2], "", "");
-                        temp.StudentId = segments[3];
-                        temp.Gsm = segments[4];
-
-                        student.Add(temp);
-                    }
-
-                    file.Close();
-                    return true;
-                }
-            }
-
-            catch (Exception e)
-            {
-
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-                return false;
-            }
-
-        }
-
-        public static bool ReadFromXml(List<Student> student)
-        {
-            try
-            {
-                using (ExcelPackage xlPackage = new ExcelPackage(new FileInfo(@"C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\record.xlsx")))
-                {
-                    var myWorksheet = xlPackage.Workbook.Worksheets.First(); //select sheet here
-                    var totalRows = myWorksheet.Dimension.End.Row;
-                    var totalColumns = myWorksheet.Dimension.End.Column;
-
-
-                    for (int rowNum = 1; rowNum <= totalRows; rowNum++) //select starting row here
-                    {
-                        var row = myWorksheet.Cells[rowNum, 1, rowNum, totalColumns].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
-                        Student temp = new Student();
-
-                        temp.Name = row.ElementAt<string>(0);
-                        temp.Surname = row.ElementAt<string>(1);
-                        temp.Birthday = Utils.GetDateTimeOnConsoleWithValidationAndFormat(row.ElementAt<string>(2).Substring(0, 10), "", "");
-                        temp.StudentId = row.ElementAt<string>(3);
-                        temp.Gsm = row.ElementAt<string>(4);
-
-                        student.Add(temp);
-                    }
-                    return true;
-                }
-            }
-
-            catch (Exception e)
-            {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-
-                return false;
-            }
-        }
-
-        public static bool WriteToXml(List<Student> student)
-        {
-
-            try
-            {
-                using (ExcelPackage xlPackage = new ExcelPackage(new FileInfo(@"C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\record.xlsx")))
-                {
-                    var myWorksheet = xlPackage.Workbook.Worksheets.First();
-                    int totalRows = student.Count;
-
-                    for (int rowNum = 1; rowNum <= totalRows; rowNum++) //select starting row here
-                    {
-                        xlPackage.Workbook.Worksheets.First().Cells[rowNum, 1].Value = student[rowNum - 1].Name;
-                        xlPackage.Workbook.Worksheets.First().Cells[rowNum, 2].Value = student[rowNum - 1].Surname;
-                        xlPackage.Workbook.Worksheets.First().Cells[rowNum, 3].Value = Utils.GetDateTimeOnConsoleWithValidationAndFormat(student[rowNum - 1].Birthday.ToString("dd.MM.yyyy"), "", "").ToString().Substring(0, 10);
-                        xlPackage.Workbook.Worksheets.First().Cells[rowNum, 4].Value = student[rowNum - 1].StudentId;
-                        xlPackage.Workbook.Worksheets.First().Cells[rowNum, 5].Value = student[rowNum - 1].Gsm;
-                    }
-                    xlPackage.Save();
-                    return true;
-                }
-            }
-
-            catch (Exception e)
-            {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-
-                return false;
-            }
         }
     }
 }
