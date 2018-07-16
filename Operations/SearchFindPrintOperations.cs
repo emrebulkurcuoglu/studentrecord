@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using static studenrecordsystem.Program;
 
 namespace studenrecordsystem
 {
@@ -11,6 +12,7 @@ namespace studenrecordsystem
 
             Console.Write("\n\nStudentId to search: ");
             string studentIdToSearch = Utils.GetNumericValueWithValidation(Console.ReadLine(), "StudentId: ", "\nPlease Enter Valid StudentId with these format (#########)\n\n", true, 9);
+            Log.writeToLogFile(DateTime.Now.ToString() + " Student with id " + studentIdToSearch + " id searched by " + LoginProcess.loginedUser.UserName);
             if (FindRecord(studentIdToSearch) != -1)
             {
                 Console.WriteLine("Record cannot found...");
@@ -49,10 +51,10 @@ namespace studenrecordsystem
 
             catch (Exception exception)
             {
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
                 Console.WriteLine(exception.Message);
                 return 0;
             }
-
         }
 
         public static void PrintRecord(string StudentIdToPrint)
@@ -117,10 +119,10 @@ namespace studenrecordsystem
                 sqlConnection.Dispose();
             }
 
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
+                Console.WriteLine(exception.Message);
 
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -14,10 +15,19 @@ namespace studenrecordsystem.Operations.SqlOperations
             string connectionString;
             SqlConnection sqlConnection;
 
-            connectionString = @"Data Source=EM-SEMRA-K;Initial Catalog=master;Integrated Security=True";
-            sqlConnection = new SqlConnection(connectionString);
-            sqlConnection.Open();
-            return sqlConnection;
+            connectionString = ConfigurationManager.AppSettings["databaseString"];
+            try
+            {
+                sqlConnection = new SqlConnection(connectionString);
+                sqlConnection.Open();
+                return sqlConnection;
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
+                return null;
+            }
         }
     }
 }

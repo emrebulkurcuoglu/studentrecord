@@ -23,11 +23,12 @@ namespace studenrecordsystem.LoginSignUp
             userToSignUp.UserPassword = Console.ReadLine();
 
             Console.Write("Gsm: ");
-            userToSignUp.Gsm = Console.ReadLine();
+            userToSignUp.Gsm = Utils.GetNumericValueWithValidation(Console.ReadLine(), "Gsm: ", "\nPlease Enter Valid Gsm with these format (5#########)\n\n", true, 10);
 
             UserSqlOperations.InsertUser(userToSignUp);
             Program.LoginProcess.loginedUser = UserSqlOperations.GetUser(userToSignUp.UserName);
             Program.LoginProcess.loginDate = DateTime.Now;
+            Log.writeToLogFile(DateTime.Now.ToString() + " " + userToSignUp.UserName + " signed up.");
             Program.RecordSystemMenu();
         }
 

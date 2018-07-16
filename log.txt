@@ -1,0 +1,5 @@
+16.07.2018 12:16:13 Program Started.
+16.07.2018 12:16:22 qwe has entered invalid username or password.
+16.07.2018 12:16:30 asdsad signed up.
+16.07.2018 12:16:45 asdsad logout.
+16.07.2018 12:16:46 Program Finished.

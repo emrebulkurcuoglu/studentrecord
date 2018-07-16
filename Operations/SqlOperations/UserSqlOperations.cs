@@ -43,6 +43,7 @@ namespace studenrecordsystem.Operations.SqlOperations
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
                 return false;
             }
 
@@ -64,6 +65,7 @@ namespace studenrecordsystem.Operations.SqlOperations
 
             catch (Exception exception)
             {
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
                 Console.WriteLine(exception.Message);
             }
         }
@@ -93,6 +95,7 @@ namespace studenrecordsystem.Operations.SqlOperations
 
             catch (Exception exception)
             {
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
                 Console.WriteLine(exception.Message);
                 return null;
             }

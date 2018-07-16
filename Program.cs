@@ -23,6 +23,7 @@ namespace studenrecordsystem
 
         static void LoginMenu()
         {
+            Log.writeToLogFile(DateTime.Now.ToString() + " " + "Program Started.");
             string choice = "-1";
             while (choice != "9")
             {
@@ -32,6 +33,7 @@ namespace studenrecordsystem
                 switch (choice)
                 {
                     case "1":
+
                         LoginControl.LoginAccessControl();
                         break;
 
@@ -40,6 +42,7 @@ namespace studenrecordsystem
                         break;
 
                     case "9":
+                        Log.writeToLogFile(DateTime.Now.ToString() + " " + "Program Finished.");
                         Console.WriteLine("...Exit...");
                         break;
 
@@ -82,6 +85,7 @@ namespace studenrecordsystem
 
                     case "9":
                         LoginProcess.logOutDate = DateTime.Now;
+                        Log.writeToLogFile(DateTime.Now.ToString() + " " + LoginProcess.loginedUser.UserName + " logout.");
                         Console.WriteLine("...Exit...");
                         break;
 

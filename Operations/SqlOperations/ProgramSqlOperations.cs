@@ -1,6 +1,7 @@
 ﻿using studenrecordsystem.Operations.SqlOperations;
 using System;
 using System.Data.SqlClient;
+using static studenrecordsystem.Program;
 
 namespace studenrecordsystem
 {
@@ -17,11 +18,13 @@ namespace studenrecordsystem
                 queryInsertStudent = queryInsertStudent + "(" + "\n'" + studentToInsert.Name + "'" + "\n,'" + studentToInsert.Surname + "'" + "\n,'" + Utils.GetDateTimeOnConsoleWithValidationAndFormat(studentToInsert.Birthday.ToString().Substring(0, 10), "", "").ToString().Substring(0, 10) + "'" + "\n,'" + studentToInsert.StudentId + "'" + "\n,'" + studentToInsert.Gsm + "'\n,'"+Program.LoginProcess.loginedUser.UserName + "'\n,'" + Program.LoginProcess.loginedUser.UserName + "')";
                 sqlCommand = new SqlCommand(queryInsertStudent, sqlConnection);
                 sqlCommand.ExecuteNonQuery();
+                Log.writeToLogFile(DateTime.Now.ToString() + " Student with " + studentToInsert.StudentId + " id is added by " + LoginProcess.loginedUser.UserName);
                 sqlConnection.Close();
             }
 
             catch (Exception exception)
             {
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
                 Console.WriteLine(exception.Message);
             }
         }
@@ -31,7 +34,7 @@ namespace studenrecordsystem
             SqlCommand sqlCommand;
 
             SqlConnection sqlConnection = GeneralSqlConnection.CreateSqlConnection();
-            sqlConnection.Open();
+
 
             try
             {
@@ -40,12 +43,13 @@ namespace studenrecordsystem
 
                 sqlCommand = new SqlCommand(query1, sqlConnection);
                 sqlCommand.ExecuteNonQuery();
+                Log.writeToLogFile(DateTime.Now.ToString() + " Student with " + studentIdToDelete + " id is deleted by " + LoginProcess.loginedUser.UserName);
 
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
+                Console.WriteLine(exception.Message);
             }
             sqlConnection.Close();
         }
@@ -57,16 +61,17 @@ namespace studenrecordsystem
                 SqlCommand sqlCommand;
                 SqlConnection sqlConnection = GeneralSqlConnection.CreateSqlConnection();
                 string queryToInsertAdress = "INSERT INTO [dbo].[Adresses] \n([StudentId],\n[AdressNo],\n[Street],\n[Neighbourhood],\n[District],\n[State_],\n[CreatedBy],\n[LastUpdatedBy])\n VALUES";
-                //queryToInsertAdress = queryToInsertAdress + "(" + "\n'" + StudentIdToInsertAdress + "'" + "\n,'" + (AdressOperations.HowManyAdress(StudentIdToInsertAdress) + 1).ToString() + "'" + "\n,'" + adressToInsert.Street + "'" + "\n,'" + adressToInsert.Neighborhood + "'" + "\n,'" + adressToInsert.District + "'" + "\n,'" + adressToInsert.State + "'\n,'" + Program.LoginProcess.loginedUser.UserName + "'\n,'" + Program.LoginProcess.loginedUser.UserName + "')";
+                queryToInsertAdress = queryToInsertAdress + "(" + "\n'" + StudentIdToInsertAdress + "'" + "\n,'" + (AdressOperations.HowManyAdress(StudentIdToInsertAdress) + 1).ToString() + "'" + "\n,'" + adressToInsert.Street + "'" + "\n,'" + adressToInsert.Neighborhood + "'" + "\n,'" + adressToInsert.District + "'" + "\n,'" + adressToInsert.State + "'\n,'" + Program.LoginProcess.loginedUser.UserName + "'\n,'" + Program.LoginProcess.loginedUser.UserName + "')";
                 sqlCommand = new SqlCommand(queryToInsertAdress, sqlConnection);
                 sqlCommand.ExecuteNonQuery();
+                Log.writeToLogFile(DateTime.Now.ToString() + " Adress added to student with " + StudentIdToInsertAdress + " id by " + LoginProcess.loginedUser.UserName);
                 sqlConnection.Close();
                 return;
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
+                Console.WriteLine(exception.Message);
                 return;
             }
         }
@@ -85,12 +90,14 @@ namespace studenrecordsystem
                 queryToUpdateAdress = queryToUpdateAdress + "WHERE StudentId like " + studentIdToUpdate + ";";
                 sqlCommand = new SqlCommand(queryToUpdateAdress, sqlConnection);
                 sqlCommand.ExecuteNonQuery();
+                Log.writeToLogFile(DateTime.Now.ToString() + " Student with " + studentIdToUpdate + " id is updated by " + LoginProcess.loginedUser.UserName);
                 sqlConnection.Close();
                 return;
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
                 return;
             }
         }
@@ -107,11 +114,13 @@ namespace studenrecordsystem
                 queryToUpdateAdress = queryToUpdateAdress + "WHERE StudentId like " + studentIdToUpdate + " and AdressNo = " + adressNoToUpdate + ";";
                 sqlCommand = new SqlCommand(queryToUpdateAdress, sqlConnection);
                 sqlCommand.ExecuteNonQuery();
+                Log.writeToLogFile(DateTime.Now.ToString() + " Adress updated, student with " + studentIdToUpdate + " id by " + LoginProcess.loginedUser.UserName);
                 sqlConnection.Close();
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
+                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
             }
         }
     }
