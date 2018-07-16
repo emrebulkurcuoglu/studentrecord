@@ -1,2 +1,2 @@
-sdad
-erf erfnefe
+Student Record System Application
+Emre Bulkurcuoğlu

@@ -44,7 +44,7 @@ namespace studenrecordsystem
                         for (int i = 0; i <no ; i++)
                         {
                             var row2 = myWorksheet2.Cells[rowno2, 1, rowno2, totalColumns2].Select(c => c.Value == null ? string.Empty : c.Value.ToString());
-                            AdressClass adresstoadd2 = new AdressClass();
+                            Adress adresstoadd2 = new Adress();
 
                             adresstoadd2.Street = row2.ElementAt<string>(0);
                             adresstoadd2.Neighborhood = row2.ElementAt<string>(1);
