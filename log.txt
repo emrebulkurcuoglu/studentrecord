@@ -2,4 +2,42 @@
 16.07.2018 12:16:22 qwe has entered invalid username or password.
 16.07.2018 12:16:30 asdsad signed up.
 16.07.2018 12:16:45 asdsad logout.
-16.07.2018 12:16:46 Program Finished.
+16.07.2018 12:16:46 Program Finished.16.07.2018 14:45:43 Program Started.
+16.07.2018 14:45:50 5656 has entered invalid username or password.
+16.07.2018 14:46:27 test logined.
+16.07.2018 14:47:11 Adress added to student with 150140600 id by test
+16.07.2018 14:47:19 Student with 150140600 id is added by test
+16.07.2018 14:47:30 Student with id 150140600 id searched by test
+16.07.2018 14:50:56 Program Started.
+16.07.2018 14:51:05 test logined.
+16.07.2018 14:51:27 Student with id 150140600 id searched by test
+16.07.2018 14:53:22 Student with 150140600 id is deleted by test
+16.07.2018 14:53:51 Adress added to student with 150140600 id by test
+16.07.2018 14:53:52 Student with 150140600 id is added by test
+16.07.2018 14:54:24 Student with id 150140111 id searched by test
+16.07.2018 14:54:34 Student with id 150140600 id searched by test
+16.07.2018 14:54:38 test logout.
+16.07.2018 14:54:39 Program Finished.
+17.07.2018 11:36:03 Program Started.
+17.07.2018 11:36:07 Program Finished.
+17.07.2018 16:19:40 Program Started.
+17.07.2018 16:19:45 test logined.
+17.07.2018 16:20:06 Student with id 100000000 id searched by test
+17.07.2018 16:32:00 Program Started.
+17.07.2018 16:32:07 test logined.
+17.07.2018 16:32:16 Student with id 100000000 id searched by test
+17.07.2018 16:32:19 test logout.
+17.07.2018 16:32:21 Program Finished.
+17.07.2018 16:44:41 Program Started.
+17.07.2018 16:44:53 test logined.
+17.07.2018 16:45:01 Student with id 100000000 id searched by test
+17.07.2018 16:47:01 Program Started.
+17.07.2018 16:47:07 test logined.
+17.07.2018 16:47:15 Student with id 100000000 id searched by test
+17.07.2018 16:47:19 test logout.
+17.07.2018 16:47:20 Program Finished.
+17.07.2018 17:40:32 Program Started.
+17.07.2018 17:40:38 test logined.
+17.07.2018 17:40:45 Student with id 150140115 id searched by test
+17.07.2018 17:40:52 test logout.
+17.07.2018 17:40:52 Program Finished.

@@ -11,7 +11,6 @@ namespace studenrecordsystem
     {
         public static void writeToLogFile(string toWrite)
         {
-
             string path = ConfigurationManager.AppSettings["logPath"];
             try
             {
@@ -21,6 +20,7 @@ namespace studenrecordsystem
                     file.WriteLine(toWrite);
                 }
             }
+
             catch(Exception exception)
             {
                 Console.WriteLine(exception.Message);

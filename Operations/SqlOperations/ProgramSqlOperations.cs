@@ -56,12 +56,13 @@ namespace studenrecordsystem
 
         public static void InsertAdress(Adress adressToInsert, string StudentIdToInsertAdress)
         {
+            SearchWebService.SearhWebServiceSoapClient client = new SearchWebService.SearhWebServiceSoapClient();
             try
             {
                 SqlCommand sqlCommand;
                 SqlConnection sqlConnection = GeneralSqlConnection.CreateSqlConnection();
                 string queryToInsertAdress = "INSERT INTO [dbo].[Adresses] \n([StudentId],\n[AdressNo],\n[Street],\n[Neighbourhood],\n[District],\n[State_],\n[CreatedBy],\n[LastUpdatedBy])\n VALUES";
-                queryToInsertAdress = queryToInsertAdress + "(" + "\n'" + StudentIdToInsertAdress + "'" + "\n,'" + (AdressOperations.HowManyAdress(StudentIdToInsertAdress) + 1).ToString() + "'" + "\n,'" + adressToInsert.Street + "'" + "\n,'" + adressToInsert.Neighborhood + "'" + "\n,'" + adressToInsert.District + "'" + "\n,'" + adressToInsert.State + "'\n,'" + Program.LoginProcess.loginedUser.UserName + "'\n,'" + Program.LoginProcess.loginedUser.UserName + "')";
+                queryToInsertAdress = queryToInsertAdress + "(" + "\n'" + StudentIdToInsertAdress + "'" + "\n,'" + (client.HowManyAdress(StudentIdToInsertAdress) + 1).ToString() + "'" + "\n,'" + adressToInsert.Street + "'" + "\n,'" + adressToInsert.Neighborhood + "'" + "\n,'" + adressToInsert.District + "'" + "\n,'" + adressToInsert.State + "'\n,'" + Program.LoginProcess.loginedUser.UserName + "'\n,'" + Program.LoginProcess.loginedUser.UserName + "')";
                 sqlCommand = new SqlCommand(queryToInsertAdress, sqlConnection);
                 sqlCommand.ExecuteNonQuery();
                 Log.writeToLogFile(DateTime.Now.ToString() + " Adress added to student with " + StudentIdToInsertAdress + " id by " + LoginProcess.loginedUser.UserName);

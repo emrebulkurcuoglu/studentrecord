@@ -12,9 +12,8 @@ namespace studenrecordsystem
     {
         public static bool AddAlternativeAddresses(string Id)
         {
-            SearchFindPrintOperations.FindRecord(Id);
-
-            if (HowManyAdress(Id) == Constants.MAX_NUMBER_OF_ADRESS)
+            SearchWebService.SearhWebServiceSoapClient client = new SearchWebService.SearhWebServiceSoapClient();
+            if (client.HowManyAdress(Id) == Constants.MAX_NUMBER_OF_ADRESS)
             {
                 Console.WriteLine("You Have Already Add Three Adress. You Cannot Add More Adress Information");
                 return false;
@@ -24,27 +23,6 @@ namespace studenrecordsystem
                 ProgramSqlOperations.InsertAdress(GetAdress(), Id);
                 return true;
             }
-        }
-
-        public static int HowManyAdress(string id)
-        {
-            string connetionString;
-            SqlConnection cnn;
-            SqlCommand cmd2;
-
-            connetionString = @"Data Source=EM-SEMRA-K;Initial Catalog=master;Integrated Security=True";
-            cnn = new SqlConnection(connetionString);
-            cnn.Open();
-
-            string query2 = "SELECT COUNT(StudentId) FROM [dbo].[Adresses] WHERE StudentId like '" + id + "'";
-            cmd2 = new SqlCommand(query2, cnn);
-            SqlDataReader read2 = cmd2.ExecuteReader();
-            read2.Read();
-            string recordCount2 = read2[0].ToString();
-
-            cnn.Close();
-
-            return Convert.ToInt32(recordCount2);
         }
 
         public static void UpdateAddresses(string studentIdToUpdate, int adressNoToUpdate)

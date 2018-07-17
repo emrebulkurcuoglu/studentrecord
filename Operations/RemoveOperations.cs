@@ -15,8 +15,8 @@ namespace studenrecordsystem
 
             Console.Write("\n\nStudentId to remove: ");
             string studentIdToRemove = Utils.GetNumericValueWithValidation(Console.ReadLine(), "StudentId: ", "\nPlease Enter Valid StudentId with these format (#########)\n\n", true, 9);
-
-            int isRecord = SearchFindPrintOperations.FindRecord(studentIdToRemove);
+            SearchWebService.SearhWebServiceSoapClient client = new SearchWebService.SearhWebServiceSoapClient();
+            int isRecord = client.FindRecord(studentIdToRemove);
 
             if (isRecord != -1)
             {
@@ -25,6 +25,7 @@ namespace studenrecordsystem
             }
             else
             {
+
                 SearchFindPrintOperations.PrintRecord(studentIdToRemove);
 
                 Console.WriteLine("Are you sure Y/N: ");

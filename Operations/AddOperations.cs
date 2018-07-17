@@ -59,7 +59,8 @@ namespace studenrecordsystem
             bool isUniqueId = true;
             while (isUniqueId)
             {
-                if (SearchFindPrintOperations.FindRecord(toReturnStudentId) == -1)
+                SearchWebService.SearhWebServiceSoapClient client = new SearchWebService.SearhWebServiceSoapClient();
+                if (client.FindRecord(toReturnStudentId) == -1)
                 {
                     Console.WriteLine("...This Student Id Has Already Recorded...\n\n");
 

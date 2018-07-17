@@ -13,11 +13,11 @@ namespace studenrecordsystem
         public static void UpdateRecord()
         {
             Console.Write("\n>>>Update Record");
-
+            SearchWebService.SearhWebServiceSoapClient client = new SearchWebService.SearhWebServiceSoapClient();
             Console.Write("\n\nEnter Student Id to Update: ");
             string studentIdToUpdate = Utils.GetNumericValueWithValidation(Console.ReadLine(), "StudentId: ", "\nPlease Enter Valid StudentId with these format (#########)\n\n", true, 9);
-
-            int isRecord = SearchFindPrintOperations.FindRecord(studentIdToUpdate);
+           
+            int isRecord = client.FindRecord(studentIdToUpdate);
             if (isRecord != -1)
             {
                 Console.WriteLine("\n...Record cannot be found...\n");
@@ -41,7 +41,7 @@ namespace studenrecordsystem
                     {
                         AdressOperations.UpdateAddresses(studentIdToUpdate, 1);
                     }
-                    else if (AdressOperations.HowManyAdress(studentIdToUpdate) < Convert.ToInt32(choice) && Convert.ToInt32(choice) <= Constants.MAX_NUMBER_OF_ADRESS)
+                    else if (client.HowManyAdress(studentIdToUpdate) < Convert.ToInt32(choice) && Convert.ToInt32(choice) <= Constants.MAX_NUMBER_OF_ADRESS)
                     {
                         Console.Write("\nThere is no adress" + choice + ". Please enter valid address number or press 0 to add new adress");
                         choice = Console.ReadLine();
@@ -50,7 +50,7 @@ namespace studenrecordsystem
                             AdressOperations.AddAlternativeAddresses(studentIdToUpdate);
                         }
                     }
-                    else if (AdressOperations.HowManyAdress(studentIdToUpdate) > Convert.ToInt32(choice)-1 && Convert.ToInt32(choice) <= Constants.MAX_NUMBER_OF_ADRESS)
+                    else if (client.HowManyAdress(studentIdToUpdate) > Convert.ToInt32(choice)-1 && Convert.ToInt32(choice) <= Constants.MAX_NUMBER_OF_ADRESS)
                     {
                         AdressOperations.UpdateAddresses(studentIdToUpdate, Convert.ToInt32(choice));
                     }
