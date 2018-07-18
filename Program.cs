@@ -2,6 +2,7 @@
 using studenrecordsystem.LoginSignUp;
 using studenrecordsystem.Model;
 using System;
+using System.Windows.Forms;
 
 namespace studenrecordsystem
 {
@@ -17,8 +18,10 @@ namespace studenrecordsystem
         static void Main(string[] args)
         {
             Console.WriteLine("***STUDENT RECORD SYSTEM***\n");
-
+            //Application.EnableVisualStyles();
+            //Application.Run(new Form1());
             LoginMenu();
+            return;
         }
 
         static void LoginMenu()

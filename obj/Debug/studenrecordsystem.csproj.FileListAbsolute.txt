@@ -8,3 +8,7 @@ C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\bin\Deb
 C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\bin\Debug\EPPlus.xml
 C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\obj\Debug\studenrecordsystem.csproj.CopyComplete
 C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\obj\Debug\studenrecordsystem.csprojAssemblyReference.cache
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\obj\Debug\studenrecordsystem.csproj.GenerateResource.cache
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\obj\Debug\studenrecordsystem.LoginForm.resources
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\bin\Debug\log4net.dll
+C:\Users\emre.bulkurcuoglu\Desktop\studenrecordsystem\studenrecordsystem\bin\Debug\log4net.xml

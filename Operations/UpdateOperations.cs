@@ -4,7 +4,6 @@ namespace studenrecordsystem
 {
     class UpdateOperations
     {
-
         static class Constants
         {
             public const int MAX_NUMBER_OF_ADRESS = 3;
