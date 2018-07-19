@@ -1,6 +1,7 @@
 ﻿using studenrecordsystem.Model;
 using studenrecordsystem.Operations.SqlOperations;
 using System;
+using static studenrecordsystem.Program;
 
 namespace studenrecordsystem.LoginSignUp
 {
@@ -26,10 +27,10 @@ namespace studenrecordsystem.LoginSignUp
             userToSignUp.Gsm = Utils.GetNumericValueWithValidation(Console.ReadLine(), "Gsm: ", "\nPlease Enter Valid Gsm with these format (5#########)\n\n", true, 10);
 
             UserSqlOperations.InsertUser(userToSignUp);
-            Program.LoginProcess.loginedUser = UserSqlOperations.GetUser(userToSignUp.UserName);
-            Program.LoginProcess.loginDate = DateTime.Now;
-            Log.writeToLogFile(DateTime.Now.ToString() + " " + userToSignUp.UserName + " signed up.");
-            Program.RecordSystemMenu();
+            LoginProcess.loginedUser = UserSqlOperations.GetUser(userToSignUp.UserName);
+            LoginProcess.loginDate = DateTime.Now;
+            LogOperation.LogProgram.Info(userToSignUp.UserName + " signed up.");
+            RecordSystemMenu();
         }
 
         public static string AddingUsername()

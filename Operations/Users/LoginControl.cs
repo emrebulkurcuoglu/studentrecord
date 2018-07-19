@@ -25,12 +25,14 @@ namespace studenrecordsystem.Login
             {
                 LoginProcess.loginedUser = UserSqlOperations.GetUser(userToLogin.UserName);
                 LoginProcess.loginDate = DateTime.Now;
-                Log.writeToLogFile(DateTime.Now.ToString() + " " + LoginProcess.loginedUser.UserName + " logined.");
+
+                LogOperation.LogProgram.Info(LoginProcess.loginedUser.UserName + " logined.");
                 RecordSystemMenu();
             }
             else
             {
-                Log.writeToLogFile(DateTime.Now.ToString() + " " + userToLogin.UserName + " has entered invalid username or password.");
+                LogOperation.LogProgram.Info(userToLogin.UserName + " has entered invalid username or password.");
+                
                 Console.WriteLine("Invalid user name or password...");
             }
         }

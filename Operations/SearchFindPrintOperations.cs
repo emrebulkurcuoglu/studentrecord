@@ -13,7 +13,7 @@ namespace studenrecordsystem
             Console.Write("\n\nStudentId to search: ");
             string studentIdToSearch = Utils.GetNumericValueWithValidation(Console.ReadLine(), "StudentId: ", "\nPlease Enter Valid StudentId with these format (#########)\n\n", true, 9);
             SearchWebService.SearhWebServiceSoapClient client = new SearchWebService.SearhWebServiceSoapClient();
-            Log.writeToLogFile(DateTime.Now.ToString() + " Student with id " + studentIdToSearch + " id searched by " + LoginProcess.loginedUser.UserName);
+            LogOperation.LogProgram.Info(" Student with id " + studentIdToSearch + " id searched by " + LoginProcess.loginedUser.UserName);
             if (client.FindRecord(studentIdToSearch) != -1)
             {
                 Console.WriteLine("Record cannot found...");
@@ -76,7 +76,7 @@ namespace studenrecordsystem
 
             catch (Exception exception)
             {
-                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
+                LogOperation.LogProgram.Error(exception.Message);
                 Console.WriteLine(exception.Message);
             }
         }

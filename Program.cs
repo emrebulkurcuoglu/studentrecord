@@ -1,4 +1,5 @@
-﻿using studenrecordsystem.Login;
+﻿using log4net;
+using studenrecordsystem.Login;
 using studenrecordsystem.LoginSignUp;
 using studenrecordsystem.Model;
 using System;
@@ -8,6 +9,10 @@ namespace studenrecordsystem
 {
     class Program
     {
+        public static class LogOperation
+        {
+            public static ILog LogProgram = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType); 
+        }
         public static class LoginProcess
         {
             public static User loginedUser;
@@ -18,15 +23,14 @@ namespace studenrecordsystem
         static void Main(string[] args)
         {
             Console.WriteLine("***STUDENT RECORD SYSTEM***\n");
-            //Application.EnableVisualStyles();
-            //Application.Run(new Form1());
+
             LoginMenu();
             return;
         }
 
         static void LoginMenu()
         {
-            Log.writeToLogFile(DateTime.Now.ToString() + " " + "Program Started.");
+            LogOperation.LogProgram.Info("Program Started.");
             string choice = "-1";
             while (choice != "9")
             {
@@ -45,7 +49,7 @@ namespace studenrecordsystem
                         break;
 
                     case "9":
-                        Log.writeToLogFile(DateTime.Now.ToString() + " " + "Program Finished.");
+                        LogOperation.LogProgram.Info("Program Finished.");
                         Console.WriteLine("...Exit...");
                         break;
 
@@ -88,7 +92,7 @@ namespace studenrecordsystem
 
                     case "9":
                         LoginProcess.logOutDate = DateTime.Now;
-                        Log.writeToLogFile(DateTime.Now.ToString() + " " + LoginProcess.loginedUser.UserName + " logout.");
+                        LogOperation.LogProgram.Info( LoginProcess.loginedUser.UserName + " logout.");
                         Console.WriteLine("...Exit...");
                         break;
 

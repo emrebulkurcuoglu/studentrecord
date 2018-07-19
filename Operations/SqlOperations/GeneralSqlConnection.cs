@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static studenrecordsystem.Program;
 
 namespace studenrecordsystem.Operations.SqlOperations
 {
@@ -25,7 +26,7 @@ namespace studenrecordsystem.Operations.SqlOperations
             catch(Exception exception)
             {
                 Console.WriteLine(exception.Message);
-                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
+                LogOperation.LogProgram.Error(exception.Message);
                 return null;
             }
         }

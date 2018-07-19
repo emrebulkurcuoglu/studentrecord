@@ -1,6 +1,7 @@
 ﻿using studenrecordsystem.Model;
 using System;
 using System.Data.SqlClient;
+using static studenrecordsystem.Program;
 
 namespace studenrecordsystem.Operations.SqlOperations
 {
@@ -43,7 +44,7 @@ namespace studenrecordsystem.Operations.SqlOperations
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
-                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
+                LogOperation.LogProgram.Info(exception.Message);
                 return false;
             }
 
@@ -65,7 +66,7 @@ namespace studenrecordsystem.Operations.SqlOperations
 
             catch (Exception exception)
             {
-                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
+                LogOperation.LogProgram.Info( exception.Message);
                 Console.WriteLine(exception.Message);
             }
         }
@@ -95,7 +96,7 @@ namespace studenrecordsystem.Operations.SqlOperations
 
             catch (Exception exception)
             {
-                Log.writeToLogFile(DateTime.Now.ToString() + " " + exception.Message);
+                LogOperation.LogProgram.Info(exception.Message);
                 Console.WriteLine(exception.Message);
                 return null;
             }
